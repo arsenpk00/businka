@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Be My Valentine 💘</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #ffc0cb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    img {
+      width: 350px;
+      border-radius: 20px;
+      margin-bottom: 30px;
+      z-index: 2;
+    }
+
+    .buttons {
+      position: relative;
+      z-index: 2;
+    }
+
+    button {
+      font-size: 22px;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      margin: 0 15px;
+    }
+
+    #yes {
+      background-color: #ff4d6d;
+      color: white;
+    }
+
+    #no {
+      background-color: white;
+      color: #ff4d6d;
+      position: absolute;
+      left: 150px;
+      top: 0;
+    }
+
+    /* POPUP */
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 40px 60px;
+      border-radius: 25px;
+      font-size: 32px;
+      color: #ff4d6d;
+      text-align: center;
+      animation: pop 0.4s ease;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* HEARTS & KISSES */
+    .floating {
+      position: fixed;
+      font-size: 30px;
+      animation: floatUp 4s linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-100vh);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <audio id="bgMusic" loop>
+  <source src="love.mp3" type="audio/mpeg">
+</audio>
+
+
+  <img src="valentine.jpg" alt="Be My Valentine">
+
+  <div class="buttons">
+    <button id="yes">Yes 💖</button>
+  <button id="no">No</button>
+  </div>
+
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      💘 Happy Valentine's Day 💘
+    </div>
+  </div>
+
+<script>
+  const noButton = document.getElementById("no");
+  const yesButton = document.getElementById("yes");
+  const popup = document.getElementById("popup");
+  const music = document.getElementById("bgMusic");
+
+  function moveNo() {
+    let x, y;
+    const yesRect = yesButton.getBoundingClientRect();
+
+    do {
+      x = Math.random() * (window.innerWidth - 120);
+      y = Math.random() * (window.innerHeight - 60);
+    } while (
+      x > yesRect.left - 120 &&
+      x < yesRect.right &&
+      y > yesRect.top - 60 &&
+      y < yesRect.bottom
+    );
+
+    noButton.style.left = x + "px";
+    noButton.style.top = y + "px";
+  }
+
+  noButton.addEventListener("mousedown", (e) => {
+    e.preventDefault();
+    moveNo();
+  });
+
+  yesButton.addEventListener("click", () => {
+    music.play();
+    popup.style.display = "flex";
+
+    setTimeout(() => {
+      popup.style.display = "none";
+      startLove();
+    }, 5000);
+  });
+
+  function startLove() {
+    setInterval(() => {
+      const el = document.createElement("div");
+      el.className = "floating";
+      el.innerText = Math.random() > 0.5 ? "❤️" : "💋";
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.bottom = "-40px";
+      document.body.appendChild(el);
+
+      setTimeout(() => el.remove(), 4000);
+    }, 300);
+  }
+</script>
+
+
+</body>
+</html>
+
