@@ -47,17 +47,13 @@
       background-color: white;
       color: #ff4d6d;
       position: absolute;
-      left: 150px;
+      left: 120px;
       top: 0;
     }
 
-    /* POPUP */
     .popup {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: rgba(0,0,0,0.6);
       display: none;
       align-items: center;
@@ -72,15 +68,8 @@
       font-size: 32px;
       color: #ff4d6d;
       text-align: center;
-      animation: pop 0.4s ease;
     }
 
-    @keyframes pop {
-      from { transform: scale(0.5); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    /* HEARTS & KISSES */
     .floating {
       position: fixed;
       font-size: 30px;
@@ -89,29 +78,25 @@
     }
 
     @keyframes floatUp {
-      from {
-        transform: translateY(0);
-        opacity: 1;
-      }
-      to {
-        transform: translateY(-100vh);
-        opacity: 0;
-      }
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-100vh); opacity: 0; }
     }
   </style>
 </head>
 
 <body>
-  <audio id="bgMusic" loop>
-  <source src="love.mp3" type="audio/mpeg">
-</audio>
-  
-  <img src="Valentine.JPG" alt="Be My Valentine">
 
+  <!-- МУЗИКА -->
+  <audio id="bgMusic" loop>
+    <source src="love.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- ФОТО -->
+  <img src="Valentine.JPG" alt="Be My Valentine">
 
   <div class="buttons">
     <button id="yes">Yes 💖</button>
-  <button id="no">No</button>
+    <button id="no">No</button>
   </div>
 
   <div class="popup" id="popup">
@@ -120,60 +105,54 @@
     </div>
   </div>
 
-<script>
-  const noButton = document.getElementById("no");
-  const yesButton = document.getElementById("yes");
-  const popup = document.getElementById("popup");
-  const music = document.getElementById("bgMusic");
+  <script>
+    const noButton = document.getElementById("no");
+    const yesButton = document.getElementById("yes");
+    const popup = document.getElementById("popup");
+    const music = document.getElementById("bgMusic");
 
-  function moveNo() {
-    let x, y;
-    const yesRect = yesButton.getBoundingClientRect();
+    noButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      let x, y;
+      const yesRect = yesButton.getBoundingClientRect();
 
-    do {
-      x = Math.random() * (window.innerWidth - 120);
-      y = Math.random() * (window.innerHeight - 60);
-    } while (
-      x > yesRect.left - 120 &&
-      x < yesRect.right &&
-      y > yesRect.top - 60 &&
-      y < yesRect.bottom
-    );
+      do {
+        x = Math.random() * (window.innerWidth - 120);
+        y = Math.random() * (window.innerHeight - 60);
+      } while (
+        x > yesRect.left - 120 &&
+        x < yesRect.right &&
+        y > yesRect.top - 60 &&
+        y < yesRect.bottom
+      );
 
-    noButton.style.left = x + "px";
-    noButton.style.top = y + "px";
-  }
+      noButton.style.left = x + "px";
+      noButton.style.top = y + "px";
+    });
 
-  noButton.addEventListener("mousedown", (e) => {
-    e.preventDefault();
-    moveNo();
-  });
+    yesButton.addEventListener("click", () => {
+      music.play();
+      popup.style.display = "flex";
 
-  yesButton.addEventListener("click", () => {
-    music.play();
-    popup.style.display = "flex";
+      setTimeout(() => {
+        popup.style.display = "none";
+        startLove();
+      }, 5000);
+    });
 
-    setTimeout(() => {
-      popup.style.display = "none";
-      startLove();
-    }, 5000);
-  });
+    function startLove() {
+      setInterval(() => {
+        const el = document.createElement("div");
+        el.className = "floating";
+        el.innerText = Math.random() > 0.5 ? "❤️" : "💋";
+        el.style.left = Math.random() * 100 + "vw";
+        el.style.bottom = "-40px";
+        document.body.appendChild(el);
 
-  function startLove() {
-    setInterval(() => {
-      const el = document.createElement("div");
-      el.className = "floating";
-      el.innerText = Math.random() > 0.5 ? "❤️" : "💋";
-      el.style.left = Math.random() * 100 + "vw";
-      el.style.bottom = "-40px";
-      document.body.appendChild(el);
-
-      setTimeout(() => el.remove(), 4000);
-    }, 300);
-  }
-</script>
-
+        setTimeout(() => el.remove(), 4000);
+      }, 300);
+    }
+  </script>
 
 </body>
 </html>
-
